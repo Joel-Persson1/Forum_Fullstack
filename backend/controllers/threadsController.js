@@ -13,7 +13,7 @@ export const getThreads = (req, res, next) => {
 
     const questions = getThreadsFromDB(category, search);
 
-    res.json(questions);
+    res.status(200).json(questions);
   } catch (error) {
     next(error);
   }
@@ -28,7 +28,7 @@ export const getThreadById = (req, res, next) => {
       return res.status(404).json({ error: "Thread not found" });
     }
 
-    res.json(questionWithId);
+    res.status(200).json(questionWithId);
   } catch (error) {
     next(error);
   }

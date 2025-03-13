@@ -25,10 +25,6 @@ export const postAnswer = (req, res, next) => {
     const { id } = req.params;
     const { content, contributor } = req.body;
 
-    if (!content) {
-      return res.status(400).json({ message: "The answer is not defined." });
-    }
-
     postAnswerToDB(id, content, contributor);
 
     res.status(201).json({ message: "Answer added successfully" });
@@ -54,13 +50,9 @@ export const deleteAnswer = (req, res, next) => {
   try {
     const { id } = req.params;
 
-    if (!id) {
-      return res.status(400).json({ message: "id is missing" });
-    }
-
     deleteAnswerFromDB(id);
 
-    res.json({ message: "Answer deleted successfully" });
+    res.status(200).json({ message: "Answer deleted successfully" });
   } catch (error) {
     next(error);
   }
