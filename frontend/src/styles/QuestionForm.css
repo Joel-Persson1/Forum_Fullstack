@@ -1,0 +1,15 @@
+input,
+textarea,
+select {
+  outline: none;
+}
+
+p.error {
+  color: red;
+}
+
+input.error,
+textarea.error,
+select.error {
+  border: 1px solid red;
+}
