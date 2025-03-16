@@ -119,14 +119,18 @@ backend/
 ### Frontend
 
 ```
-frontend/
-├── public/        # Static files
-├── src/
-│   ├── components/    # React components
-│   ├── contexts/     # React context providers
-│   ├── styles/       # CSS files
-│   └── App.jsx       # Main application component
-└── index.html
+├── frontend/
+│   ├── package.json
+│   ├── vite.config.js
+│   ├── src/
+│   │   ├── main.jsx        # Frontend start file
+│   │   ├── components/     # React components
+│   │   ├── pages/          # Components with a Route
+│   │   ├── context/        # Context
+│   │   ├── hooks/          # Custom hooks
+│   │   ├── styles/         # Global and componentbased css-files
+│   │   └── assets/         # SVGS
+
 ```
 
 ## API Endpoints
