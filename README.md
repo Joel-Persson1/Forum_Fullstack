@@ -41,7 +41,7 @@ This is a full-stack Q&A forum application built with React (frontend) and Node.
 1. Clone the repository
 
 ```bash
-git clone <your-repository-url>
+git clone https://github.com/Joel-Persson1/assignment.git
 ```
 
 2. Navigate to the backend directory
