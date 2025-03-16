@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 
 const formatTimeAgo = (dateString) => {
+  if (!dateString) return "Unknown"; // Handle missing date
+
   const now = new Date();
   const past = new Date(dateString);
   const localPast = new Date(past.getTime() - past.getTimezoneOffset() * 60000);
@@ -16,13 +18,18 @@ const formatTimeAgo = (dateString) => {
   return `${days} day${days !== 1 ? "s" : ""} ago`;
 };
 
-export function useTimeAgo(threadCreatedAt, lastAnswerAt) {
-  const [formattedTime, setFormattedTime] = useState("");
+export function useTimeAgo(createdAt, updatedAt) {
+  const [formattedCreatedAt, setFormattedCreatedAt] = useState(() =>
+    formatTimeAgo(createdAt)
+  );
+  const [formattedUpdatedAt, setFormattedUpdatedAt] = useState(() =>
+    formatTimeAgo(updatedAt)
+  );
 
   useEffect(() => {
-    const lastActivity = lastAnswerAt ? lastAnswerAt : threadCreatedAt;
-    setFormattedTime(formatTimeAgo(lastActivity));
-  }, [lastAnswerAt, threadCreatedAt]);
+    setFormattedCreatedAt(formatTimeAgo(createdAt));
+    setFormattedUpdatedAt(formatTimeAgo(updatedAt));
+  }, [createdAt, updatedAt]);
 
-  return formattedTime;
+  return { formattedCreatedAt, formattedUpdatedAt };
 }

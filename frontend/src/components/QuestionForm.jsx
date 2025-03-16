@@ -58,20 +58,22 @@ export function QuestionForm() {
         setSuccessMsg(true);
         setTimeout(() => {
           navigate(-1);
-        }, 3000);
+        }, 2000);
       }
     }
   };
 
   return (
     <>
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {error && <p className="error-box">{error}</p>}
 
-      {successMsg && <p>Thank you for your question! redirecting...</p>}
+      {successMsg && (
+        <p className="success-message">Thank you for your question!</p>
+      )}
 
       {!error && !successMsg && (
-        <form onSubmit={handleOnSubmit}>
-          {errors.title && <p style={{ color: "red" }}>{errors.title}</p>}
+        <form onSubmit={handleOnSubmit} className="form">
+          {errors.title && <p className="error">{errors.title}</p>}
           <InputField
             label="Question Title"
             id="title"
@@ -79,7 +81,7 @@ export function QuestionForm() {
             error={errors.title}
           ></InputField>
 
-          {errors.content && <p style={{ color: "red" }}>{errors.content}</p>}
+          {errors.content && <p className="error">{errors.content}</p>}
           <InputField
             label="Question Description"
             id="content"
@@ -88,16 +90,14 @@ export function QuestionForm() {
             error={errors.content}
           ></InputField>
 
-          <div>
-            {errors.category && (
-              <p style={{ color: "red" }}>{errors.category}</p>
-            )}
+          <div className="inputField">
+            {errors.category && <p className="error">{errors.category}</p>}
             <label htmlFor="category">Category</label>
             <select id="category" ref={categoryRef}>
               <option value="">Select a category</option>
-              <option value="Coding">Coding</option>
-              <option value="Cooking">Cooking</option>
-              <option value="Sports">Sports</option>
+              <option value="coding">Coding</option>
+              <option value="cooking">Cooking</option>
+              <option value="sports">Sports</option>
             </select>
           </div>
 

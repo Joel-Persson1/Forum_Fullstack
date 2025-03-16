@@ -1,0 +1,13 @@
+.homepage {
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 2rem;
+  margin-left: 3rem;
+}
+
+.homepage .header {
+  font-size: 2.6rem;
+  letter-spacing: -1px;
+}

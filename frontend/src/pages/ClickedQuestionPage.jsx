@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { GlobalContext } from "../context/GlobalContextProvider";
 
 import { QuestionById } from "../components/QuestionById";
@@ -7,13 +7,15 @@ import { Answers } from "../components/Answers";
 import { AnswerQuestion } from "../components/AnswerQuestion";
 
 export function ClickedQuestionPage() {
+  const navigate = useNavigate();
   const { handleApiRequest, isLoading, error } = useContext(GlobalContext);
   const { id } = useParams();
 
   const [thread, setThread] = useState(null);
+  const [deleteMessage, setDeleteMessage] = useState(false);
 
   const getThread = () => {
-    const data = handleApiRequest({
+    handleApiRequest({
       endpoint: "/api/threads/",
       id: id,
       errMsg: "Failed to fetch thread",
@@ -33,17 +35,28 @@ export function ClickedQuestionPage() {
     });
 
     if (result) {
-      alert(result.message);
+      setDeleteMessage(true);
       setThread(null);
+
+      setTimeout(() => {
+        navigate(-1);
+      }, 2000);
     }
   };
 
   return (
-    <>
-      {isLoading && <p>Loading...</p>}
-      {error && <p style={{ color: "red" }}>{error}</p>}
+    <section className="section">
+      {isLoading && <div className="loader"></div>}
 
-      {!isLoading && thread === null && !error && <p>No thread found.</p>}
+      {error && <p className="error-box">{error}</p>}
+
+      {deleteMessage && (
+        <p className="success-message">The thread was deleted!</p>
+      )}
+
+      {!isLoading && thread === null && !error && !deleteMessage && (
+        <p className="no-result-box">No thread found.</p>
+      )}
 
       {!isLoading && thread && (
         <>
@@ -56,6 +69,6 @@ export function ClickedQuestionPage() {
           <AnswerQuestion id={id} />
         </>
       )}
-    </>
+    </section>
   );
 }

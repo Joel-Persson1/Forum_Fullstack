@@ -2,7 +2,7 @@ import { useContext, useRef } from "react";
 import { GlobalContext } from "../context/GlobalContextProvider";
 
 export function AnswerQuestion({ id }) {
-  const { handleApiRequest } = useContext(GlobalContext);
+  const { handleApiRequest, error } = useContext(GlobalContext);
   const inputAnswer = useRef();
   const contributor = useRef();
 
@@ -28,10 +28,21 @@ export function AnswerQuestion({ id }) {
   };
 
   return (
-    <form onSubmit={handleOnSubmit}>
+    <form className="form-section form" onSubmit={handleOnSubmit}>
+      {error && <p>{error}</p>}
+
       <h3>Your Answer</h3>
-      <input type="text" ref={contributor} placeholder="Your Name" />
-      <textarea ref={inputAnswer} placeholder="Write your answer here..." />
+      <input
+        className="input"
+        type="text"
+        ref={contributor}
+        placeholder="Your Name"
+      />
+      <textarea
+        className="textarea"
+        ref={inputAnswer}
+        placeholder="Write your answer here..."
+      />
       <button type="submit">Post Answer</button>
     </form>
   );

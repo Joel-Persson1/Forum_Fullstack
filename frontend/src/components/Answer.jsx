@@ -1,8 +1,9 @@
 import { useContext, useState } from "react";
 import { GlobalContext } from "../context/GlobalContextProvider";
+import { Trash, Pencil, Check } from "lucide-react";
 
 export function Answer({ data, fetchAnswers }) {
-  const { handleApiRequest } = useContext(GlobalContext);
+  const { handleApiRequest, error } = useContext(GlobalContext);
   const [editMode, setEditMode] = useState(false);
   const [content, setContent] = useState(data.answerContent);
   const [contributor, setContributor] = useState(data.contributor);
@@ -37,34 +38,56 @@ export function Answer({ data, fetchAnswers }) {
       id: id,
       method: "DELETE",
       errMsg: "Could not delete answer",
-    }).then((res) => alert(res.message));
+    }).then((res) => console.log(res.message));
   };
 
   return (
-    <section>
+    <section className="answer-box">
+      {error && <p>{error}</p>}
+
       {!editMode && (
         <>
-          <h3>{data.contributor}</h3>
-          <button onClick={() => handleDeleteAnswer()}>trashcan</button>
-          <button onClick={() => toggleEditMode()}>edit</button>
-          <p>{data.answerContent}</p>
-          <hr />
+          <div className="title-btn-box">
+            <h3 className="answer-contributor">{data.contributor}</h3>
+            <div className="btn-box">
+              <button className="button" onClick={() => handleDeleteAnswer()}>
+                <Trash size={20} color="black" />
+              </button>
+              <button className="button" onClick={() => toggleEditMode()}>
+                <Pencil size={20} color="black" />
+              </button>
+            </div>
+          </div>
+
+          <p className="answer-content">{data.answerContent}</p>
         </>
       )}
 
       {editMode && (
-        <form onSubmit={handleEditButton}>
-          <input
-            type="text"
-            value={contributor}
-            onChange={(e) => setContributor(e.target.value)}
-          />
-          <button onClick={() => handleDeleteAnswer()}>trashcan</button>
-          <button type="submit">edit</button>
-          <textarea
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-          />
+        <form className="title-btn-box" onSubmit={handleEditButton}>
+          <div className="edit-title-content-box">
+            <input
+              className="inputField"
+              type="text"
+              value={contributor}
+              onChange={(e) => setContributor(e.target.value)}
+            />
+
+            <textarea
+              className="inputField"
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+            />
+          </div>
+
+          <div className="btn-box">
+            <button className="button" onClick={() => handleDeleteAnswer()}>
+              <Trash size={20} color="black" />
+            </button>
+            <button className="button" type="submit">
+              <Check size={20} color="black" />
+            </button>
+          </div>
         </form>
       )}
     </section>

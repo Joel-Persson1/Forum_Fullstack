@@ -6,7 +6,7 @@ export const InputField = ({
   error,
   children,
 }) => (
-  <div>
+  <div className="inputField">
     <label htmlFor={id}>{label}</label>
     <p className={error ? "error" : ""}>{children}</p>
     {type === "textarea" ? (

@@ -1,8 +1,9 @@
 import { useContext, useState } from "react";
 import { GlobalContext } from "../context/GlobalContextProvider";
+import { Trash, Pencil, Check } from "lucide-react";
 
 export function QuestionById({ thread, handleDeleteThread, fetchThread }) {
-  const { handleApiRequest } = useContext(GlobalContext);
+  const { handleApiRequest, error } = useContext(GlobalContext);
   const [title, setTitle] = useState(thread.title);
   const [content, setContent] = useState(thread.content);
   const [editMode, setEditMode] = useState(false);
@@ -15,7 +16,6 @@ export function QuestionById({ thread, handleDeleteThread, fetchThread }) {
     e.preventDefault();
 
     if (thread.title !== title || thread.content !== content) {
-      console.log("fetching");
       const result = await handleApiRequest({
         endpoint: "/api/question/put/",
         id: thread.threadId,
@@ -31,29 +31,51 @@ export function QuestionById({ thread, handleDeleteThread, fetchThread }) {
   };
 
   return (
-    <article>
+    <article className="clicked-question">
+      {error && <p className="error-box">{error}</p>}
+
       {!editMode && (
         <>
-          <h1>{title}</h1>
-          <button onClick={() => handleDeleteThread()}>trashcan</button>
-          <button onClick={() => toggleEditMode()}>edit</button>
+          <div className="flex">
+            <h1>{title}</h1>
+            <div className="btn-box">
+              <button className="button" onClick={() => handleDeleteThread()}>
+                <Trash size={20} color="black" />
+              </button>
+              <button className="button" onClick={() => toggleEditMode()}>
+                <Pencil size={20} color="black" />
+              </button>
+            </div>
+          </div>
+
           <p>{content}</p>
         </>
       )}
 
       {editMode && (
-        <form onSubmit={handleEditButton}>
-          <input
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-          <button onClick={() => handleDeleteThread()}>trashcan</button>
-          <button type="submit">edit</button>
-          <textarea
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-          />
+        <form className="edit-form-box" onSubmit={handleEditButton}>
+          <div>
+            <input
+              className="edit-input"
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            />
+            <textarea
+              className="edit-textarea-content"
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+            />
+          </div>
+
+          <div className="btn-box">
+            <button className="button" onClick={() => handleDeleteThread()}>
+              <Trash size={20} color="black" />
+            </button>
+            <button className="button" type="submit">
+              <Check size={20} color="black" />
+            </button>
+          </div>
         </form>
       )}
     </article>

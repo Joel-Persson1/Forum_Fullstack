@@ -3,7 +3,7 @@ import { GlobalContext } from "../context/GlobalContextProvider";
 import { Answer } from "./Answer";
 
 export function Answers({ id }) {
-  const { isLoading, handleApiRequest } = useContext(GlobalContext);
+  const { isLoading, handleApiRequest, error } = useContext(GlobalContext);
   const [answers, setAnswers] = useState([]);
 
   const fetchAnswers = async () => {
@@ -12,8 +12,6 @@ export function Answers({ id }) {
       id: id,
       errMsg: "Could not retrieve the answers to this question",
     });
-
-    console.log(data);
 
     if (data) {
       setAnswers(data);
@@ -25,8 +23,8 @@ export function Answers({ id }) {
   }, [id]);
 
   return (
-    <div>
-      <h2>Answers</h2>
+    <div className="answers-div">
+      <h2 className="answer-title">Answers</h2>
       {isLoading && <p>Loading...</p>}
       {!isLoading &&
         answers.map((answer) => (
@@ -36,6 +34,8 @@ export function Answers({ id }) {
             fetchAnswers={fetchAnswers}
           />
         ))}
+
+      {error && <p>{error}</p>}
     </div>
   );
 }

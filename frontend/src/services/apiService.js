@@ -1,4 +1,5 @@
 const BASE_URL = "http://localhost:3000";
+const TIMEOUT = 5000; // 5 seconds timeout
 
 export const fetchData = async ({
   endpoint,
@@ -7,10 +8,9 @@ export const fetchData = async ({
   body = null,
   headers = { "Content-Type": "application/json" },
   errMsg = "Failed to fetch data",
-  timeout = 5000, // 5 seconds timeout
 }) => {
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), timeout);
+  const timeoutId = setTimeout(() => controller.abort(), TIMEOUT);
 
   try {
     const url = new URL(`${BASE_URL}${endpoint}${id ? `${id}` : ""}`);
