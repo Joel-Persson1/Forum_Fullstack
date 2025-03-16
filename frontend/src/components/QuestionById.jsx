@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { GlobalContext } from "../context/GlobalContextProvider";
-import { Trash, Pencil, Check } from "lucide-react";
+import { Trash, Pencil, Check, X } from "lucide-react";
 
 export function QuestionById({ thread, handleDeleteThread, fetchThread }) {
   const { handleApiRequest, error } = useContext(GlobalContext);
@@ -69,6 +69,9 @@ export function QuestionById({ thread, handleDeleteThread, fetchThread }) {
           </div>
 
           <div className="btn-box">
+            <button className="button" onClick={() => toggleEditMode()}>
+              <X size={20} color="black" />
+            </button>
             <button className="button" onClick={() => handleDeleteThread()}>
               <Trash size={20} color="black" />
             </button>

@@ -23,3 +23,9 @@ export const deleteAnswerFromDB = (id) => {
   const stmt = db.prepare("DELETE FROM answer WHERE answerId = ?");
   return stmt.run(id);
 };
+
+export const getThreadIdByAnswerId = (answerId) => {
+  const stmt = db.prepare("SELECT threadId FROM answer WHERE answerId = ?");
+  const result = stmt.get(answerId);
+  return result ? result.threadId : null;
+};

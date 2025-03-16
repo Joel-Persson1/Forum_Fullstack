@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { GlobalContext } from "../context/GlobalContextProvider";
-import { Trash, Pencil, Check } from "lucide-react";
+import { Trash, Pencil, Check, X } from "lucide-react";
 
 export function Answer({ data, fetchAnswers }) {
   const { handleApiRequest, error } = useContext(GlobalContext);
@@ -81,6 +81,9 @@ export function Answer({ data, fetchAnswers }) {
           </div>
 
           <div className="btn-box">
+            <button className="button" onClick={() => toggleEditMode()}>
+              <X size={20} color="black" />
+            </button>
             <button className="button" onClick={() => handleDeleteAnswer()}>
               <Trash size={20} color="black" />
             </button>

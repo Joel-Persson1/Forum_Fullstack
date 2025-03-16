@@ -10,8 +10,9 @@ export const getThreads = (req, res, next) => {
   try {
     let category = req.query.category || null;
     const search = req.query.search || null;
+    const sortType = req.query.sortType || null;
 
-    const questions = getThreadsFromDB(category, search);
+    const questions = getThreadsFromDB(category, search, sortType);
 
     res.status(200).json(questions);
   } catch (error) {
