@@ -3,6 +3,8 @@ import { Question } from "./Question";
 import { GlobalContext } from "../context/GlobalContextProvider";
 import { useSearch } from "../context/SearchContextProvider";
 import { SortCategorySelects } from "./SortCategorySelects";
+import { Loader } from "./Loader";
+import { Error } from "./Error";
 
 export function QuestionList() {
   const { isLoading, handleApiRequest, error } = useContext(GlobalContext);
@@ -25,9 +27,16 @@ export function QuestionList() {
 
   return (
     <section className="section">
-      {error && <p className="error-box">{error}</p>}
+      <SortCategorySelects
+        sortType={sortType}
+        setSortType={setSortType}
+        category={category}
+        setCategory={setCategory}
+      />
 
-      {isLoading && <div className="loader"></div>}
+      {error && <Error error={error} />}
+
+      {isLoading && <Loader />}
 
       {!isLoading && !error && threads.length === 0 && (
         <p className="error-box">No threads found</p>
@@ -35,13 +44,6 @@ export function QuestionList() {
 
       {!isLoading && !error && threads.length > 0 && (
         <>
-          <SortCategorySelects
-            sortType={sortType}
-            setSortType={setSortType}
-            category={category}
-            setCategory={setCategory}
-          />
-
           {threads.length > 0 &&
             threads.map((thread) => (
               <Question data={thread} key={thread.threadId} />

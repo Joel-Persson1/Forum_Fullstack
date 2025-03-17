@@ -1,7 +1,8 @@
 import { useContext, useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import { GlobalContext } from "../context/GlobalContextProvider";
-import { InputField } from "./InputField";
+import { Error } from "./Error";
+import { Form } from "./Form";
 
 export function QuestionForm() {
   const { handleApiRequest, error } = useContext(GlobalContext);
@@ -65,44 +66,20 @@ export function QuestionForm() {
 
   return (
     <>
-      {error && <p className="error-box">{error}</p>}
+      {error && <Error error={error} />}
 
       {successMsg && (
         <p className="success-message">Thank you for your question!</p>
       )}
 
       {!error && !successMsg && (
-        <form onSubmit={handleOnSubmit} className="form">
-          {errors.title && <p className="error">{errors.title}</p>}
-          <InputField
-            label="Question Title"
-            id="title"
-            refProp={titleRef}
-            error={errors.title}
-          ></InputField>
-
-          {errors.content && <p className="error">{errors.content}</p>}
-          <InputField
-            label="Question Description"
-            id="content"
-            type="textarea"
-            refProp={contentRef}
-            error={errors.content}
-          ></InputField>
-
-          <div className="inputField">
-            {errors.category && <p className="error">{errors.category}</p>}
-            <label htmlFor="category">Category</label>
-            <select id="category" ref={categoryRef}>
-              <option value="">Select a category</option>
-              <option value="coding">Coding</option>
-              <option value="cooking">Cooking</option>
-              <option value="sports">Sports</option>
-            </select>
-          </div>
-
-          <button type="submit">Publish Question</button>
-        </form>
+        <Form
+          handleOnSubmit={handleOnSubmit}
+          errors={errors}
+          titleRef={titleRef}
+          contentRef={contentRef}
+          categoryRef={categoryRef}
+        />
       )}
     </>
   );

@@ -58,5 +58,7 @@
   min-height: 30rem;
 }
 
-.no-result-box {
+.error-paragraf {
+  font-size: 0.9rem;
+  color: red;
 }

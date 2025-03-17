@@ -1,12 +1,15 @@
 import { useContext, useState } from "react";
 import { GlobalContext } from "../context/GlobalContextProvider";
-import { Trash, Pencil, Check, X } from "lucide-react";
+import { Error } from "./Error";
+import { AnswerEditMode } from "./AnswerEditMode";
+import { AnswerDefaultMode } from "./AnswerDefaultMode";
 
 export function Answer({ data, fetchAnswers }) {
   const { handleApiRequest, error } = useContext(GlobalContext);
   const [editMode, setEditMode] = useState(false);
   const [content, setContent] = useState(data.answerContent);
   const [contributor, setContributor] = useState(data.contributor);
+  const [errorMsg, setErrorMsg] = useState("");
 
   const id = data.answerId;
 
@@ -14,20 +17,40 @@ export function Answer({ data, fetchAnswers }) {
     setEditMode(!editMode);
   };
 
+  const editValidation = () => {
+    let hasError = false;
+
+    if (data.contributor === contributor && data.answerContent === content) {
+      setErrorMsg("You must edit the fields");
+      hasError = true;
+    }
+
+    if (contributor.trim().length < 1 || content.trim().length < 1) {
+      setErrorMsg("Enter your name and describe your answer");
+      hasError = true;
+    }
+
+    if (!hasError) {
+      setErrorMsg(""); // Clear error message if there are no issues
+    }
+
+    return hasError; // Return true if there's an error
+  };
+
   const handleEditButton = async (e) => {
     e.preventDefault();
 
-    if (data.contributor !== contributor || data.content !== content) {
-      const result = await handleApiRequest({
-        endpoint: "/api/answer/put/",
-        id: data.answerId,
-        method: "PUT",
-        body: { contributor, content },
-        errMsg: "Failed to update thread",
-      });
+    if (editValidation()) return; // Stop execution if validation fails
 
-      if (result) fetchAnswers();
-    }
+    const result = await handleApiRequest({
+      endpoint: "/api/answer/put/",
+      id: data.answerId,
+      method: "PUT",
+      body: { contributor, content },
+      errMsg: "Failed to update thread",
+    });
+
+    if (result) fetchAnswers();
 
     setEditMode(false);
   };
@@ -43,55 +66,28 @@ export function Answer({ data, fetchAnswers }) {
 
   return (
     <section className="answer-box">
-      {error && <p>{error}</p>}
+      {error && <Error error={error} />}
 
       {!editMode && (
-        <>
-          <div className="title-btn-box">
-            <h3 className="answer-contributor">{data.contributor}</h3>
-            <div className="btn-box">
-              <button className="button" onClick={() => handleDeleteAnswer()}>
-                <Trash size={20} color="black" />
-              </button>
-              <button className="button" onClick={() => toggleEditMode()}>
-                <Pencil size={20} color="black" />
-              </button>
-            </div>
-          </div>
-
-          <p className="answer-content">{data.answerContent}</p>
-        </>
+        <AnswerDefaultMode
+          data={data}
+          handleDeleteAnswer={handleDeleteAnswer}
+          toggleEditMode={toggleEditMode}
+        />
       )}
 
       {editMode && (
-        <form className="title-btn-box" onSubmit={handleEditButton}>
-          <div className="edit-title-content-box">
-            <input
-              className="inputField"
-              type="text"
-              value={contributor}
-              onChange={(e) => setContributor(e.target.value)}
-            />
-
-            <textarea
-              className="inputField"
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-            />
-          </div>
-
-          <div className="btn-box">
-            <button className="button" onClick={() => toggleEditMode()}>
-              <X size={20} color="black" />
-            </button>
-            <button className="button" onClick={() => handleDeleteAnswer()}>
-              <Trash size={20} color="black" />
-            </button>
-            <button className="button" type="submit">
-              <Check size={20} color="black" />
-            </button>
-          </div>
-        </form>
+        <AnswerEditMode
+          handleEditButton={handleEditButton}
+          contributor={contributor}
+          setContributor={setContributor}
+          content={content}
+          setContent={setContent}
+          toggleEditMode={toggleEditMode}
+          handleDeleteAnswer={handleDeleteAnswer}
+          errorMsg={errorMsg}
+          data={data}
+        />
       )}
     </section>
   );

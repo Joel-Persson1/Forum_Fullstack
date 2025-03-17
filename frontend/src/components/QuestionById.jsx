@@ -1,21 +1,48 @@
 import { useContext, useState } from "react";
 import { GlobalContext } from "../context/GlobalContextProvider";
-import { Trash, Pencil, Check, X } from "lucide-react";
+import { Error } from "./Error";
+import { QuestionEditMode } from "./QuestionEditMode";
+import { QuestionDefaultMode } from "./QuestionDefaultMode";
 
 export function QuestionById({ thread, handleDeleteThread, fetchThread }) {
   const { handleApiRequest, error } = useContext(GlobalContext);
   const [title, setTitle] = useState(thread.title);
   const [content, setContent] = useState(thread.content);
   const [editMode, setEditMode] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
 
   const toggleEditMode = () => {
     setEditMode(!editMode);
   };
 
+  const editValidation = () => {
+    let setError = false;
+
+    console.log(title, content);
+
+    if (thread.title === title && thread.content === content) {
+      console.log("HELLOOO");
+      setErrorMsg("You must edit the fields");
+      setError = true;
+    }
+
+    if (title.trim().length < 1 || content.trim().length < 1) {
+      console.log("HELLOOO");
+      setErrorMsg("Enter your title and describe your question");
+      setError = true;
+    }
+
+    if (!setError) {
+      setErrorMsg("");
+    }
+
+    return setError;
+  };
+
   const handleEditButton = async (e) => {
     e.preventDefault();
 
-    if (thread.title !== title || thread.content !== content) {
+    if (!editValidation()) {
       const result = await handleApiRequest({
         endpoint: "/api/question/put/",
         id: thread.threadId,
@@ -25,61 +52,37 @@ export function QuestionById({ thread, handleDeleteThread, fetchThread }) {
       });
 
       if (result) fetchThread();
-    }
 
-    setEditMode(false);
+      setEditMode(false);
+    }
   };
 
   return (
     <article className="clicked-question">
-      {error && <p className="error-box">{error}</p>}
+      {error && <Error error={error} />}
 
       {!editMode && (
-        <>
-          <div className="flex">
-            <h1>{title}</h1>
-            <div className="btn-box">
-              <button className="button" onClick={() => handleDeleteThread()}>
-                <Trash size={20} color="black" />
-              </button>
-              <button className="button" onClick={() => toggleEditMode()}>
-                <Pencil size={20} color="black" />
-              </button>
-            </div>
-          </div>
-
-          <p>{content}</p>
-        </>
+        <QuestionDefaultMode
+          thread={thread}
+          title={title}
+          content={content}
+          handleDeleteThread={handleDeleteThread}
+          toggleEditMode={toggleEditMode}
+        />
       )}
 
       {editMode && (
-        <form className="edit-form-box" onSubmit={handleEditButton}>
-          <div>
-            <input
-              className="edit-input"
-              type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-            />
-            <textarea
-              className="edit-textarea-content"
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-            />
-          </div>
-
-          <div className="btn-box">
-            <button className="button" onClick={() => toggleEditMode()}>
-              <X size={20} color="black" />
-            </button>
-            <button className="button" onClick={() => handleDeleteThread()}>
-              <Trash size={20} color="black" />
-            </button>
-            <button className="button" type="submit">
-              <Check size={20} color="black" />
-            </button>
-          </div>
-        </form>
+        <QuestionEditMode
+          thread={thread}
+          handleEditButton={handleEditButton}
+          title={title}
+          setTitle={setTitle}
+          content={content}
+          setContent={setContent}
+          toggleEditMode={toggleEditMode}
+          handleDeleteThread={handleDeleteThread}
+          errorMsg={errorMsg}
+        />
       )}
     </article>
   );

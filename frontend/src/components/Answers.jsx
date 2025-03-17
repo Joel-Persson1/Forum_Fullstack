@@ -1,6 +1,8 @@
 import { useContext, useEffect, useState } from "react";
 import { GlobalContext } from "../context/GlobalContextProvider";
 import { Answer } from "./Answer";
+import { Loader } from "./Loader";
+import { Error } from "./Error";
 
 export function Answers({ id }) {
   const { isLoading, handleApiRequest, error } = useContext(GlobalContext);
@@ -25,7 +27,11 @@ export function Answers({ id }) {
   return (
     <div className="answers-div">
       <h2 className="answer-title">Answers</h2>
-      {isLoading && <p>Loading...</p>}
+
+      {isLoading && <Loader />}
+
+      {error && <Error error={error} />}
+
       {!isLoading &&
         answers.map((answer) => (
           <Answer
@@ -34,8 +40,6 @@ export function Answers({ id }) {
             fetchAnswers={fetchAnswers}
           />
         ))}
-
-      {error && <p>{error}</p>}
     </div>
   );
 }

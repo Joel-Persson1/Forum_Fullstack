@@ -1,5 +1,6 @@
 import { useContext, useRef } from "react";
 import { GlobalContext } from "../context/GlobalContextProvider";
+import { Error } from "./Error";
 
 export function AnswerQuestion({ id }) {
   const { handleApiRequest, error } = useContext(GlobalContext);
@@ -29,7 +30,7 @@ export function AnswerQuestion({ id }) {
 
   return (
     <form className="form-section form" onSubmit={handleOnSubmit}>
-      {error && <p>{error}</p>}
+      {error && <Error error={error} />}
 
       <h3>Your Answer</h3>
       <input

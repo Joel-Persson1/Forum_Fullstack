@@ -23,6 +23,10 @@ export function SortCategorySelects({
         <option value="coding">Coding</option>
         <option value="cooking">Cooking</option>
         <option value="sports">Sports</option>
+        <option value="tv">TV</option>
+        <option value="politics">Politics</option>
+        <option value="friends">Friends</option>
+        <option value="others">Others</option>
       </select>
     </div>
   );

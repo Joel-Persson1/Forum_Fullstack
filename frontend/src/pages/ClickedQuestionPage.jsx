@@ -5,6 +5,8 @@ import { GlobalContext } from "../context/GlobalContextProvider";
 import { QuestionById } from "../components/QuestionById";
 import { Answers } from "../components/Answers";
 import { AnswerQuestion } from "../components/AnswerQuestion";
+import { Error } from "../components/Error";
+import { Loader } from "../components/Loader";
 
 export function ClickedQuestionPage() {
   const navigate = useNavigate();
@@ -46,9 +48,9 @@ export function ClickedQuestionPage() {
 
   return (
     <section className="section">
-      {isLoading && <div className="loader"></div>}
+      {isLoading && <Loader />}
 
-      {error && <p className="error-box">{error}</p>}
+      {error && <Error error={error} />}
 
       {deleteMessage && (
         <p className="success-message">The thread was deleted!</p>
