@@ -1,5 +1,7 @@
 # Q&A Forum Application
 
+![Screenshot of the homepage](./frontend/public/screenshot.png)
+
 ## Description
 
 This is a full-stack Q&A forum application built with React (frontend) and Node.js/Express (backend). Users can post questions, provide answers, and engage in discussions across various topics including coding, cooking, and sports. The application features sorting, filtering, and real-time updates for an interactive user experience.
